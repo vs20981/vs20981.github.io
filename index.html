@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>网址导航</title>
+    <style>
+    /* vs20981 */
+        :root {
+            --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-primary: #1f2937;
+            --text-secondary: #4b5563;
+            --hover-effect: 0 6px 20px -6px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', system-ui, sans-serif;
+            line-height: 1.5;
+            margin: 0;
+            padding: 2rem;
+            background: var(--primary-gradient);
+            min-height: 100vh;
+            color: var(--text-primary);
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .speed-section {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 2.0rem;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--hover-effect);
+            backdrop-filter: blur(8px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .section-title {
+            font-weight: 600;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            margin: -1.5rem -1.5rem 1.5rem -1.5rem;
+            background: var(--primary-gradient);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .server-list {
+            display: grid;
+            gap: 1rem;
+            list-style: none;
+            padding: 0;
+        }
+
+        .server-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(249, 250, 251, 0.8);
+            border-radius: 8px;
+            transition: all 0.2s ease;
+        }
+
+        .server-item:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--hover-effect);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 0.75rem;
+        }
+
+        .btn {
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .visit-btn {
+            background: var(--primary-gradient);
+            color: white;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .downappm {
+            color: rgba(178, 6, 6, 0.548);
+            text-decoration: none;
+        }
+
+        .copy-btn {
+            background: rgba(99, 102, 241, 0.1);
+            color: #6366f1;
+            border: 1px solid rgba(99, 102, 241, 0.2);
+            cursor: pointer;
+        }
+
+        .copy-btn:hover {
+            background: rgba(99, 102, 241, 0.2);
+        }
+
+        .page-title {
+            text-align: center;
+            margin: 2rem 0;
+            color: white;
+            font-size: 2.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .footer {
+            text-align: center;
+            padding: 2rem 0;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.875rem;
+            margin-top: 3rem;
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .server-item {
+                gap: 1rem;
+            }
+        }
+
+        .qr-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0 3rem;
+            background: rgba(255, 255, 255, 0.9);
+            padding: 1.5rem;
+            border-radius: 16px;
+            box-shadow: var(--hover-effect);
+        }
+
+        .qr-code {
+            width: 120px;
+            height: 120px;
+            border: 3px solid white;
+            border-radius: 12px;
+        }
+
+        .qr-content {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            color: var(--text-primary);
+        }
+
+        .platform {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .platform i {
+            font-size: 1.8rem;
+            width: 40px;
+        }
+
+        .fa-apple {
+            color: #000;
+        }
+
+        .fa-android {
+            color: #3DDC84;
+        }
+
+        .platform-text {
+            display: flex;
+            flex-direction: column;
+            gap: 0.01rem;
+        }
+
+        .platform-text span:first-child {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .platform-text span:last-child {
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        	/* 定义通用图标样式 */
+        .icon {
+        display: inline-block;
+        width: 32px;  /* 根据实际需要调整尺寸 */
+        height: 32px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        vertical-align: middle;
+        }
+        
+        /* Apple 图标 */
+        .apple {
+        background-image: url("data:image/png;base64,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");
+        }
+        
+        /* Android 图标 */
+        .android {
+        background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEIAAABCCAYAAADjVADoAAAAAXNSR0IArs4c6QAAAERlWElmTU0AKgAAAAgAAYdpAAQAAAABAAAAGgAAAAAAA6ABAAMAAAABAAEAAKACAAQAAAABAAAAQqADAAQAAAABAAAAQgAAAADorYEXAAAE00lEQVR4Ae2bTWhcVRTHM5nErNK6EpUoQ3BRhCKYT+JmxKIYaDeSQkURhYoF7aqrFnHjx0JdtaWC0IWCQbOzgYIJOAuJk48pVBfpQsIoTZSiiyAFY+KMv9POHe593nnz3rt3xij3weXc83XPuf973se8d6enJxwBgYBAQCAgEBBIikAuqWE7u/Hx8dFarXapXq9PVSqV3Xb2PvQjIyP9uVxuqbe399TKysqay5h9Ls667/T09LX5+fkekjqD/D1dp/enpqbu29nZeZYJPAZoj6J7iKYWpI78J/h1dNcHBgauLi0t3dL99b7Ewq5HYgOErkrdVwmkdrQ5TExMjOzt7ZX6+/sPl8vlqrKZmZnJV6vVE1TMq8ieoPUqXRtaA5hvaB8XCoXZubm5v5T95ORkYXd39/u+vr7i8vJyRcmzUq9ASBKjo6PnWaUCp8dR4cfGxo4DwDt0HxHe4fiBCji3urr6hYzBaXEFgKpra2tvOIzZdPUOBAkeJMEbtLMAcIRIzzej+el8BiCLgP0u7RCAb/sY1jsQkhRgvAa55CPBmDFOAcJHMfpUqqTnauJBi8XivRifjjpQIZeRnYQuRHWteGx/R/cmTcb7MWJ3uhErIs7Geq0ISjXHNWEB+pSeDhO6yrk8LTK55UGqtAdpsQd+r+N3UYzwm4CUdQf0i1wznobWdXmWvteKAIQXoiBIUsh2VHLDw8M1+nuKj6O6H5P9M2qL/ojEjMqz8N4qglvkPRsbG1WSeKBFIh8ymW/RnWACz7WwMcTY/4bgLeg2F95z9A8ZBneZnwG3wK31H0BZbFuKvAHByhwl2S9bRuqggrvIMU6RKy4hvJ0arPJxl0RcfH3E9gnEYZfJuPgChHNsb0AwkYLLZBx9nWP7BOKA42Rc3A+6OIuvTyC8XXhdJ5XF3ycQWeLvG58ARGMpUr2Y4VnhDM8Kd372cu8+z737g32zpFoiWfJMXBEMfhIQ3ifew9KkLzIt/r7oZs0zMRCqEvTZ2mS6/t/o23KyyaK5JQYCR9tzvk0WjdFt3paTTWbklQYI+fkcPWyyqE23eVtONpmRVxogDMf/GxOAaKxoACIAYZ7coSJCRYSKMBEIFWHiEa4RoSJCRZgIhIow8QjXiAwVYdsXZZOZUHefs+VkkxmZpamIG4bnXUaX/WrRd0ukx9ZzUvFtMqW7QxMDIe8oDU8YXcaHWqddbdGx0/B6bD0nNYZNpnSK5lWnHd3a2ro2NDR0m89r8rZnm8Hf5uXtBeWHbgPdy/Dd/r5Ry+fzL21ubt6UXNrlqfKNUq9Js5HsRQJcBJDBaKBO8FSC7KiRzSSfuI7vFQhJhrfI9wPEk3RfgcpmMttRQfiVTaHJnqH/uMY3uwCwCHMZ+jVV+UtT4dBJ9V0jSZxGYrNUh2wktQLBBMqs4tm48fA/AJBWIPBbwH82zj+tLvHFMu3A/zX7AERjxQIQAQjz5A0VESoiVISJQBcqIm4DaJxOJdrShueQ5k5eZexKO3aN4GHoeqvk4nTKJ86Gz/zfKTtftGNA8ORXYuVKlkTXBwcHP7fIDVHDZt0QwsiYMnZU7sp3DAgSrvOfrGPQCzT5ZXgL+imyYqlU+qNd4mIjtuLT8L0pYzXGdN6N3y5+0AcEAgIBgYBAQKA1An8DImSIpsnfHhUAAAAASUVORK5CYII=");
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="qr-header">
+            <a href="http://www.16w.top/2psz" target="_blank" class="downappm"><img src="data:image/png;base64,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" class="qr-code" alt="二维码"></a>
+            <div class="qr-content">
+                <div class="platform">
+                    <i class="icon apple"></i>
+                    <div class="platform-text">
+                        <span><a href="http://www.16w.top/2psz" target="_blank" class="downappm">iOS</a></span>
+                        <span><a href="http://www.16w.top/2psz" target="_blank" class="downappm">iOS 12 或以上</a></span>
+                    </div>
+                </div>
+                <div class="platform">
+                    <i class="icon android"></i>
+                    <div class="platform-text">
+                        <span><a href="http://www.16w.top/2psz" target="_blank" class="downappm">Android</a></span>
+                        <span><a href="http://www.16w.top/2psz" target="_blank" class="downappm">安卓7.0或以上</a></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="speed-section T000">
+            <h2 class="section-title">BET63加任意三数字.com</h2>
+            <ul class="server-list" id="T000"></ul>
+        </section>
+        
+        <section class="speed-section T001">
+            <h2 class="section-title">BET630加任意两数字.com</h2>
+            <ul class="server-list" id="T001"></ul>
+        </section>
+
+        <section class="speed-section T002">
+            <h2 class="section-title">BET730加任意两数字.com</h2>
+            <ul class="server-list" id="T002"></ul>
+        </section>
+
+        <section class="speed-section T003">
+            <h2 class="section-title">BET830加任意两数字.com</h2>
+            <ul class="server-list" id="T003"></ul>
+        </section>
+
+        <section class="speed-section T004">
+            <h2 class="section-title">BET63加任意a-z单字母.com</h2>
+            <ul class="server-list" id="T004"></ul>
+        </section>
+
+        <section class="speed-section T005">
+            <h2 class="section-title">BET73加任意a-z单字母.com</h2>
+            <ul class="server-list" id="T005"></ul>
+        </section>
+
+        <section class="speed-section T006">
+            <h2 class="section-title">BET83加任意a-z单字母.com</h2>
+            <ul class="server-list" id="T006"></ul>
+        </section>
+    </div>
+
+    <script>
+        // 配置数据
+        const servers = {
+            T000: [
+                'BET63100.com',
+                'BET63258.com',
+                'BET63473.com',
+                'BET63555.com',
+                'BET63850.com',
+                'BET63999.com'
+            ],
+            T001: [
+                'BET63010.com',
+                'BET63022.com',
+                'BET63075.com'
+            ],
+            T002: [
+                'BET73003.com',
+                'bet73065.com',
+                'BET73099.com'
+            ],
+            T003: [
+                'BET83001.com',
+                'BET83034.com',
+                'BET83043.com'
+            ],
+            T004: [
+                'BET63b.com',
+                'BET63c.com',
+                'BET63z.com'
+            ],
+            T005: [
+                'BET73c.com',
+                'BET73d.com',
+                'BET73e.com'
+            ],
+            T006: [
+                'BET83b.com',
+                'BET83h.com',
+                'BET83y.com'
+            ],
+        };
+
+        // 初始化DOM
+        function initDom() {
+            for (const [group, domains] of Object.entries(servers)) {
+                const list = document.getElementById(group);
+                domains.forEach(domain => {
+                    const li = document.createElement('li');
+                    li.className = 'server-item';
+                    li.innerHTML = `
+                        <span>${domain}</span>
+                        <div class="btn-group">
+                            <button class="copy-btn">复制网址</button>
+                            <a href="http://${domain}" target="_blank" class="visit-btn">访问网站</a>
+                        </div>
+                    `;
+                    list.appendChild(li);
+                });
+            }
+
+            // 添加复制功能
+            document.querySelectorAll('.copy-btn').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const domain = btn.closest('.server-item').querySelector('span').textContent;
+                    navigator.clipboard.writeText(domain)
+                        .then(() => alert('网址已复制'))
+                        .catch(() => alert('复制失败，请手动复制'));
+                });
+            });
+        }
+
+        // 初始化
+        initDom();
+    </script>
+    <div class="footer">
+        Copyright © 2026 网址导航 | 本页面仅供导航使用
+    </div>
+</body>
+</html>
